@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+<body>
+  <div class="main">
+    <div class="header">
+      <div class="btn-block" style="width: 70%">
+        <div class="menu-btn" style="margin-left: 50px;">Главная</div>
+        <div class="menu-btn">Статьи</div>
+      </div>
+      <div class="btn-block" style="width: 30%">
+        <div class="menu-btn btn-border">Регистрация</div>
+        <div class="menu-btn">Вход</div>
+      </div>
+    </div>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    <div class="footer"></div>
+  </div>
+</body>
+</html>
