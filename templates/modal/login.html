@@ -1,0 +1,19 @@
+{% load static %}
+<div class="login modal-mask" style="display: none;">
+    <div class="modal-container">
+        <div style="text-align: right">
+            <img src="{% static 'images/close.svg' %}" onclick="showModal('.login', false)" style="cursor: pointer" />
+        </div>
+        <form>
+            <div>
+                <input type="text" placeholder="Логин">
+            </div>
+            <div>
+                <input type="text" placeholder="Пароль">
+            </div>
+            <div>
+                <input type="submit" class="form-btn" value="Вход">
+            </div>
+        </form>
+    </div>
+</div>
