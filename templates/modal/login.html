@@ -4,7 +4,8 @@
         <div style="text-align: right">
             <img src="{% static 'images/close.svg' %}" onclick="showModal('.login', false)" style="cursor: pointer" />
         </div>
-        <form>
+        <form method="post">
+            {% csrf_token %}
             <div>
                 <input type="text" placeholder="Логин">
             </div>
