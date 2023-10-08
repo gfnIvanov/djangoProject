@@ -4,7 +4,8 @@
         <div style="text-align: right">
             <img src="{% static 'images/close.svg' %}" onclick="showModal('.register', false)" style="cursor: pointer" />
         </div>
-        <form>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
             <div>
                 <input type="text" placeholder="Введите логин">
             </div>
@@ -13,6 +14,12 @@
             </div>
             <div>
                 <input type="text" placeholder="Повторите пароль">
+            </div>
+            <div>
+                <input type="text" placeholder="Имя">
+            </div>
+            <div>
+                <input type="text" placeholder="Фамилия">
             </div>
             <div>
                 <input type="submit" class="form-btn" value="Регистрация">
