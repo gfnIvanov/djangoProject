@@ -1,0 +1,25 @@
+<div class="header">
+    <div class="btn-block" style="width: 70%">
+        <a class="menu-btn" onclick="showModal()">
+            <div style="margin-left: 50px">Главная</div>
+        </a>
+        <a class="menu-btn" onclick="showModal()">
+            <div>Статьи</div>
+        </a>
+        <a class="menu-btn" onclick="showModal()">
+            <div>Админ</div>
+        </a>        
+    </div>
+    <div class="btn-block" style="width: 30%">
+        <a class="menu-btn btn-border" onclick="showModal('.register')">
+            <div>Регистрация</div>
+        </a>
+        <a class="menu-btn" onclick="showModal('.login')">
+        {% if is_auth %}
+            <div>Выход</div>
+        {% else %}
+            <div>Вход</div>
+        {% endif %}
+        </a>
+    </div>
+</div>
