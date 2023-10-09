@@ -94,3 +94,8 @@ input {
     border-radius: 2px;
     cursor: pointer;
 }
+
+.err-msg {
+    color: firebrick;
+    font-size: 11px;
+}

@@ -1,25 +1,45 @@
 {% load static %}
-<div class="register modal-mask" style="display: none;">
+{% if show_register %}
+<div class="register modal-mask">
     <div class="modal-container">
         <div style="text-align: right">
-            <img src="{% static 'images/close.svg' %}" onclick="showModal('.register', false)" style="cursor: pointer" />
+            <a href="{% url 'index' %}">
+                <img src="{% static 'images/close.svg' %}" style="cursor: pointer" />
+            </a>
         </div>
         <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
             <div>
-                <input type="text" placeholder="Введите логин">
+                <input type="text" name="user_login" placeholder="Введите логин" value="{{ form_data.user_login }}">
+            {% for err in errors.user_login %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
             </div>
             <div>
-                <input type="text" placeholder="Введите пароль">
+                <input type="password" name="user_password" placeholder="Введите пароль" value="{{ form_data.user_password }}">
+            {% for err in errors.user_password %}
+            {% if err.code != 'mismatch' %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endif %}
+            {% endfor %}
             </div>
             <div>
-                <input type="text" placeholder="Повторите пароль">
+                <input type="password" name="password_confirm" placeholder="Повторите пароль" value="{{ form_data.password_confirm }}">
+            {% for err in errors.password_confirm %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
             </div>
             <div>
-                <input type="text" placeholder="Имя">
+                <input type="text" name="user_firstname" placeholder="Имя" value="{{ form_data.user_firstname }}">
+            {% for err in errors.user_firstname %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
             </div>
             <div>
-                <input type="text" placeholder="Фамилия">
+                <input type="text" name="user_surname" placeholder="Фамилия" value="{{ form_data.user_surname }}">
+            {% for err in errors.user_surname %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
             </div>
             <div>
                 <input type="submit" class="form-btn" value="Регистрация">
@@ -27,3 +47,4 @@
         </form>
     </div>
 </div>
+{% endif %}
