@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib.auth import logout, authenticate, login
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ def index(request):
     context = {'is_auth': is_auth}
     return render(request, 'index.html', context)
 
+
 def register(request):
     context = {'show_register': True}
     if request.method == 'POST':
@@ -20,7 +22,7 @@ def register(request):
                 context['form_data'] = form.cleaned_data
                 context['errors'] = {'user_login': [{'message': 'Указанный логин уже присутствует в базе'}]}
                 return render(request, 'index.html', context)
-            except User.DoesNotExist:       
+            except User.DoesNotExist:
                 user = User.objects.create_user(username=form.cleaned_data['user_login'],
                                                 password=form.cleaned_data['user_password'])
                 user.first_name = form.cleaned_data['user_firstname']
@@ -31,3 +33,23 @@ def register(request):
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
     return render(request, 'index.html', context)
+
+
+def login_view(request):
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        context = {'is_auth': True}
+        return render(request, "index.html", context)
+    else:
+        return redirect("app")
+
+
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        context = {'is_auth': False}
+        return render(request, "index.html", context)
+    return render(request, 'index.html')
