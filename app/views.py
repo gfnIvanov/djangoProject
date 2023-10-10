@@ -1,6 +1,6 @@
 from typing import Optional
 from django.contrib.auth import authenticate
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -74,7 +74,7 @@ def login(request: HttpRequest):
                 context['errors'] = {'auth_failed': [{'message': 'Не удалось пройти авторизацию'}]}
         context['form_data'] = form.cleaned_data
         if context.get('errors') is not None:
-            context['errors'].update(form.errors.get_json_data()) 
+            context['errors'].update(form.errors.get_json_data())
         else:
             context['errors'] = form.errors.get_json_data()
     return render(request, 'index.html', context)
@@ -87,7 +87,10 @@ def logout(request):
     _set_auth_data(request)
     return HttpResponseRedirect(reverse('index'))
 
+def edit_post(request, pk):
+    post = Post.objects.get(pk=pk)
 
+    
 def create_post(request: HttpRequest):
     if request.method == "POST":
         context = {}
@@ -106,7 +109,24 @@ def create_post(request: HttpRequest):
                 return HttpResponseRedirect(reverse('index'))
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
-    return render(request, 'index.html', context)
+        
+        # здесь нужно поправить
+        if request.method != 'POST':
+            form = PostForm(instance=post)
+        else:
+            form = PostForm(instance=post, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('index.html', post_id=post.id)
+    context = {'post': post, 'index': index, 'form': form}
+    return render(request, 'components/edit_post.html', context)
+
+
+def delete_post(request, pk):
+    post_to_delete = Post.objects.get(pk=pk)
+    if post_to_delete is not None:
+        post_to_delete.delete()
+    return HttpResponseRedirect(reverse('index'))
 
 
 def get_post(request: HttpRequest, pk: int):
