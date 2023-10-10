@@ -32,4 +32,4 @@ class Comment(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
 
     def str(self):
-        return self.title
+        return 'Comment by {} on {}'.format(self.author, self.post)

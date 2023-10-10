@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Post
+from .models import Post, Comment
 
 
 class RequiredField(forms.CharField):
@@ -32,3 +32,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ["title", "body"]
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('author', 'body')

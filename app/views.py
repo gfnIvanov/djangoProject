@@ -1,10 +1,11 @@
 from django.contrib.auth import logout, authenticate, login
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .forms import RegisterForm, PostForm
-from .models import Post
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
+from .forms import RegisterForm, PostForm, CommentForm
+from .models import Post, Comment
 
 
 def index(request):
@@ -34,11 +35,35 @@ def create_post(request):
             except Post.DoesNotExist:
                 post = Post.objects.create(title=form.cleaned_data['title'],
                                            body=form.cleaned_data['body'])
+                post.tags = form.cleaned_data['tags']
                 post.author = request.user
                 post.save()
                 return HttpResponseRedirect(reverse('index'))
     else:
         form = PostForm()
+        context['form_data'] = form.cleaned_data
+        context['errors'] = form.errors.get_json_data()
+    return render(request, 'index.html', context)
+
+
+def get_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'index.html', {'post': post})
+
+
+def create_comment(request):
+    context = {'show_register': False, 'is_auth': True}
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = Comment.objects.create(body=form.cleaned_data['body'])
+            comment.author = request.user
+            comment.post = ""  # TODO взять Post на который пишется коммент
+            comment.save()
+            return render(request, 'index.html')
+
+    else:
+        form = CommentForm()
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
     return render(request, 'index.html', context)
