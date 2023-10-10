@@ -11,35 +11,35 @@
             {% csrf_token %}
             <div>
                 <input type="text" name="user_login" placeholder="Введите логин" value="{{ form_data.user_login }}">
-            {% for err in errors.user_login %}
+                {% for err in errors.user_login %}
                 <span class="err-msg">{{ err.message }}</span>
-            {% endfor %}
+                {% endfor %}
             </div>
             <div>
                 <input type="password" name="user_password" placeholder="Введите пароль" value="{{ form_data.user_password }}">
-            {% for err in errors.user_password %}
-            {% if err.code != 'mismatch' %}
+                {% for err in errors.user_password %}
+                {% if err.code != 'mismatch' %}
                 <span class="err-msg">{{ err.message }}</span>
-            {% endif %}
-            {% endfor %}
+                {% endif %}
+                {% endfor %}
             </div>
             <div>
                 <input type="password" name="password_confirm" placeholder="Повторите пароль" value="{{ form_data.password_confirm }}">
-            {% for err in errors.password_confirm %}
+                {% for err in errors.password_confirm %}
                 <span class="err-msg">{{ err.message }}</span>
-            {% endfor %}
+                {% endfor %}
             </div>
             <div>
                 <input type="text" name="user_firstname" placeholder="Имя" value="{{ form_data.user_firstname }}">
-            {% for err in errors.user_firstname %}
+                {% for err in errors.user_firstname %}
                 <span class="err-msg">{{ err.message }}</span>
-            {% endfor %}
+                {% endfor %}
             </div>
             <div>
                 <input type="text" name="user_surname" placeholder="Фамилия" value="{{ form_data.user_surname }}">
-            {% for err in errors.user_surname %}
+                {% for err in errors.user_surname %}
                 <span class="err-msg">{{ err.message }}</span>
-            {% endfor %}
+                {% endfor %}
             </div>
             <div>
                 <input type="submit" class="form-btn" value="Регистрация">
