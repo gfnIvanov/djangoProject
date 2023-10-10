@@ -46,6 +46,27 @@ def create_post(request):
     return render(request, 'index.html', context)
 
 
+def edit_post(request, pk):
+    post = Post.objects.get(pk=pk)
+
+    if request.method != 'POST':
+        form = PostForm(instance=post)
+    else:
+        form = PostForm(instance=post, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index.html', post_id=post.id)
+    context = {'post': post, 'index': index, 'form': form}
+    return render(request, 'components/edit_post.html', context)
+
+
+def delete_post(request, pk):
+    post_to_delete = Post.objects.get(pk=pk)
+    if post_to_delete is not None:
+        post_to_delete.delete()
+    return HttpResponseRedirect(reverse('index'))
+
+
 def get_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'index.html', {'post': post})
