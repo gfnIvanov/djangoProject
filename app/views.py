@@ -87,9 +87,6 @@ def logout(request):
     _set_auth_data(request)
     return HttpResponseRedirect(reverse('index'))
 
-def edit_post(request, pk):
-    post = Post.objects.get(pk=pk)
-
     
 def create_post(request: HttpRequest):
     if request.method == "POST":
@@ -109,20 +106,24 @@ def create_post(request: HttpRequest):
                 return HttpResponseRedirect(reverse('index'))
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
+    return render(request, 'index.html', context)
         
-        # здесь нужно поправить
-        if request.method != 'POST':
-            form = PostForm(instance=post)
-        else:
-            form = PostForm(instance=post, data=request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('index.html', post_id=post.id)
+
+def edit_post(request: HttpRequest, pk: int):
+    post = Post.objects.get(pk=pk)
+
+    if request.method != 'POST':
+        form = PostForm(instance=post)
+    else:
+        form = PostForm(instance=post, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index.html', post_id=post.id)
     context = {'post': post, 'index': index, 'form': form}
-    return render(request, 'components/edit_post.html', context)
+    return render(request, 'edit_post.html', context)
 
 
-def delete_post(request, pk):
+def delete_post(request: HttpRequest, pk: int):
     post_to_delete = Post.objects.get(pk=pk)
     if post_to_delete is not None:
         post_to_delete.delete()
