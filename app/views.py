@@ -13,6 +13,15 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+def home(request):
+    # Это для вкладки "Главная". Чтобы все посты выводились
+    if request.user.is_authenticated():
+        posts = Post.objects.all()
+        return render(request, 'index.html', {"posts": posts})
+    else:
+        redirect('app')
+
+
 def create_post(request):
     context = {'show_register': False, 'is_auth': True}
     if request.method == "POST":
@@ -65,14 +74,16 @@ def login_view(request):
     if user is not None:
         login(request, user)
         context = {'is_auth': True}
-        return render(request, "index.html", context)
+        return HttpResponseRedirect(reverse('index'))
+
     else:
-        return redirect("app")
+        return HttpResponseRedirect(reverse('index'))
 
 
 def logout_view(request):
-    if request.method == "POST":
-        logout(request)
-        context = {'is_auth': False}
-        return render(request, "index.html", context)
-    return render(request, 'index.html')
+    # TODO Нужно подправить файл headers.html, чтобы отправлять через кнопку POST-запрос
+    # if request.method == "POST":
+    logout(request)
+    context = {'is_auth': False}
+    return render(request, "index.html", context)
+# return render(request, 'index.html')
