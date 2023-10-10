@@ -2,21 +2,42 @@
 
 
 {% block content %}
-<div><h1>HELLO</h1></div>
 
+<div><h1>Заголовок</h1></div>
+
+<div class="para">
 <hr>
-<h2>Редактирование </h2>
 
-    <button type="button">кнопка для редактирования</button>
+<h2>Заголовок</h2>
 
-    <div style = "color:green">
-			<p>Абзац</p>
-			<p>Абзац</p>
-		</div>
-		<div style = "background-color:khaki">
-			<p>Абзац</p>
-			<p>Абзац</p>
-		</div>
+  <div class="paragraph">
+      <p>Текст</p>
+      <p>Текст</p>
+      <ul>
+          <li>Текст</li>
+          <li>Текст</li>
+          <li>Текст</li>
+      </ul>
+  </div>
+
+    <div>Этот текст</div>
+    <div onclick="showInput()">Редактировать</div>
+    <div>
+        <form>
+            <textarea value="Этот же текст"></textarea>
+            <div>
+                <input type="submit" class="form-btn" value="Сохранить">
+            </div>
+            <input type=" ">
+
+            <button class="btn btn-1 btn-sep icon-info">кнопка для редактирования</button>
+            <button class="btn btn-2 btn-sep icon-info">кнопка для редактирования</button>
+        </form>
+    </div>
+
+    <button class="btn btn-1 btn-sep icon-info">кнопка для редактирования</button>
+    <button class="btn btn-2 btn-sep icon-info">кнопка для редактирования</button>
+</div>
 
 
 {% endblock %}

@@ -94,3 +94,21 @@ input {
     border-radius: 2px;
     cursor: pointer;
 }
+
+.paragraph {
+    background: none;
+}
+
+.para {
+    background: #f6eded;
+}
+
+.btn-1 {
+  background: #15c776;
+  color: #f8f7f7;
+}
+
+.btn-2 {
+  background: #ec8888;
+  color: #fff;
+}
