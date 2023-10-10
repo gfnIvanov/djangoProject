@@ -1,12 +1,11 @@
 from typing import Optional
 from django.contrib.auth import authenticate
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.contrib.auth.models import User
-from .forms import RegisterForm, LoginForm, PostForm
-from .models import Post
-
+from .forms import RegisterForm, LoginForm, PostForm, CommentForm
+from .models import Post, Comment
 
 def index(request: HttpRequest):
     context = {'active_page': 'index'}
@@ -79,6 +78,51 @@ def logout(request):
     """
     _set_auth_data(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+def create_post(request: HttpRequest):
+    context = {'show_register': False, 'is_auth': True}
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            try:
+                Post.objects.get(title=form.cleaned_data['title'])
+                context['form_data'] = form.cleaned_data
+                context['errors'] = {'title': [{'message': 'Указанное название поста уже присутствует в базе'}]}
+            except Post.DoesNotExist:
+                post = Post.objects.create(title=form.cleaned_data['title'],
+                                           body=form.cleaned_data['body'])
+                post.tags = form.cleaned_data['tags']
+                post.author = request.user
+                post.save()
+                return HttpResponseRedirect(reverse('index'))
+    else:
+        form = PostForm()
+        context['form_data'] = form.cleaned_data
+        context['errors'] = form.errors.get_json_data()
+    return render(request, 'index.html', context)
+
+
+def get_post(request: HttpRequest, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'index.html', {'post': post})
+
+
+def create_comment(request: HttpRequest):
+    context = {'show_register': False, 'is_auth': True}
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = Comment.objects.create(body=form.cleaned_data['body'])
+            comment.author = request.user
+            comment.post = ""  # TODO взять Post на который пишется коммент
+            comment.save()
+            return render(request, 'index.html')
+    else:
+        form = CommentForm()
+        context['form_data'] = form.cleaned_data
+        context['errors'] = form.errors.get_json_data()
+    return render(request, 'index.html', context)
 
 
 def create_post(request: HttpRequest):
