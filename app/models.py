@@ -10,7 +10,7 @@ class Post(models.Model):
     tags = TaggableManager()
     date_create = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return self.title
 
 
@@ -19,7 +19,7 @@ class About(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, )
     body = models.TextField()
 
-    def str(self):
+    def __str__(self):
         return self.title
 
 
@@ -31,5 +31,5 @@ class Comment(models.Model):
     body = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return 'Comment by {} on {}'.format(self.author, self.post)
