@@ -3,6 +3,7 @@ cffi==1.16.0
 cryptography==41.0.4
 Django==4.2.6
 django-environ==0.11.2
+django-taggit==4.0.0
 pycparser==2.21
 PyMySQL==1.1.0
 sqlparse==0.4.4

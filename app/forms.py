@@ -27,6 +27,10 @@ class RegisterForm(forms.Form):
                 self.add_error('user_password', msg)
                 self.add_error('password_confirm', msg)
 
+class LoginForm(forms.Form):
+    user_login = RequiredField()
+    user_password = RequiredField()
+
 
 class PostForm(forms.ModelForm):
     class Meta:
