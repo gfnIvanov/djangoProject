@@ -1,27 +1,33 @@
 <div class="header">
     <div class="btn-block" style="width: 70%">
-        <a class="menu-btn" onclick="showModal()">
-            <div style="margin-left: 50px">Главная</div>
+        <a class="menu-btn" href="{% url 'index' %}">
+            <div class="{% if active_page == 'index' %} active-page {% endif %}" style="margin-left: 50px">Главная</div>
         </a>
-        <a class="menu-btn" onclick="showModal()">
-            <div>Статьи</div>
+        {% if is_auth %}
+        <a class="menu-btn" href="{% url 'posts' %}">
+            <div class="{% if active_page == 'posts' %} active-page {% endif %}">Статьи</div>
         </a>
-        <a class="menu-btn" onclick="showModal()">
-            <div>Админ</div>
+        <a class="menu-btn" href="{% url 'posts' %}">
+            <div class="{% if active_page == 'admin' %} active-page {% endif %}">Админ</div>
         </a>
+        {% endif %}
     </div>
     <div class="btn-block" style="width: 30%">
+        {% if is_auth %}
+        <div class="menu-btn btn-border" style="cursor:default">{{ firstname }} {{ surname }}</div>
+        {% else %}
         <a class="menu-btn btn-border" href="{% url 'register' %}">
             <div>Регистрация</div>
         </a>
-        <a class="menu-btn" onclick="showModal('.login')">
-            {% if user.is_authenticated %}
-                <a class="menu-btn btn-border" href="{% url 'logout-view' %}">
-                    <div>Выход</div>
-                </a>
-            {% else %}
-                <div>Вход</div>
-            {% endif %}
+        {% endif %}
+        {% if is_auth %}
+        <a class="menu-btn" href="{% url 'logout' %}">
+            <div>Выход</div>
         </a>
+        {% else %}
+        <a class="menu-btn" href="{% url 'login' %}">
+            <div>Вход</div>
+        </a>
+        {% endif %}
     </div>
 </div>
