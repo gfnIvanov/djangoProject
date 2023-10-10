@@ -8,18 +8,20 @@
         </a>
         <a class="menu-btn" onclick="showModal()">
             <div>Админ</div>
-        </a>        
+        </a>
     </div>
     <div class="btn-block" style="width: 30%">
         <a class="menu-btn btn-border" href="{% url 'register' %}">
             <div>Регистрация</div>
         </a>
         <a class="menu-btn" onclick="showModal('.login')">
-        {% if is_auth %}
-            <div>Выход</div>
-        {% else %}
-            <div>Вход</div>
-        {% endif %}
+            {% if user.is_authenticated %}
+                <a class="menu-btn btn-border" href="{% url 'logout-view' %}">
+                    <div>Выход</div>
+                </a>
+            {% else %}
+                <div>Вход</div>
+            {% endif %}
         </a>
     </div>
 </div>

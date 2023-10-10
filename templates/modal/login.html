@@ -2,15 +2,15 @@
 <div class="login modal-mask" style="display: none;">
     <div class="modal-container">
         <div style="text-align: right">
-            <img src="{% static 'images/close.svg' %}" onclick="showModal('.login', false)" style="cursor: pointer" />
+            <img src="{% static 'images/close.svg' %}" onclick="showModal('.login', false)" style="cursor: pointer"/>
         </div>
-        <form method="post">
+        <form method="post" action="{% url 'login-view' %}">
             {% csrf_token %}
             <div>
-                <input type="text" placeholder="Логин">
+                <input type="text" name="username" placeholder="Логин">
             </div>
             <div>
-                <input type="text" placeholder="Пароль">
+                <input type="text" name="password" placeholder="Пароль">
             </div>
             <div>
                 <input type="submit" class="form-btn" value="Вход">
