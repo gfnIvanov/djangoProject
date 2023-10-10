@@ -1,10 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from .models import Post
 
 
 class RequiredField(forms.CharField):
     required = True
     default_error_messages = {'required': 'Поле обязательно для заполнения'}
+
 
 class RegisterForm(forms.Form):
     user_login = RequiredField()
@@ -24,4 +26,9 @@ class RegisterForm(forms.Form):
                 msg = ValidationError('Пароли не совпадают', code='mismatch')
                 self.add_error('user_password', msg)
                 self.add_error('password_confirm', msg)
-            
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ["title", "body"]
