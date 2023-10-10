@@ -40,6 +40,11 @@ a {
     cursor: pointer;
 }
 
+.active-page {
+    height: 45px;
+    border-bottom: 4px solid firebrick;
+}
+
 .btn-border {
     border: 1px solid gray;
     border-radius: 10px;
@@ -95,6 +100,17 @@ input {
     cursor: pointer;
 }
 
+
 .Line {
     margin: 25px;
+}
+.err-msg {
+    width: 100%;
+    display: inline-block;
+    color: firebrick;
+    font-size: 11px;
+}
+
+.ta-c {
+    text-align: center;
 }

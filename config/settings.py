@@ -13,11 +13,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 import pymysql
 from pathlib import Path
+import environ
 
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# get environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -39,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app.apps.AppConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +85,8 @@ DATABASES = {
     'default': {
         "ENGINE": 'django.db.backends.mysql',
         "NAME": "django_project",
-        "USER": 'root',
-        "PASSWORD": "root",
+        "USER": env('DB_USER'),
+        "PASSWORD": env('DB_PASSWORD'),
         "HOST": "localhost",
         "PORT": "3306",
         "OPTIONS": {
