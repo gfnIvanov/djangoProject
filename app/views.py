@@ -21,7 +21,6 @@ def posts(request: HttpRequest):
     for post in posts:
         user = User.objects.get(username=post.author)
         author = user.last_name + ' ' + user.first_name[0] + '.'
-        print(post.tags)
         posts_data.append({
             'id': post.id,
             'title': post.title,
@@ -33,11 +32,6 @@ def posts(request: HttpRequest):
     auth_data = request.session.get('auth_data', {'is_auth': False})
     context.update(auth_data)
     return render(request, 'posts.html', context)
-
-
-def add_post(request: HttpRequest):
-    auth_data = request.session.get('auth_data', {'is_auth': False})
-    return render(request, 'add_post.html', auth_data)
 
 
 def watch_post(request: HttpRequest, pk: int):
@@ -114,7 +108,7 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-def create_post(request: HttpRequest):
+def add_post(request: HttpRequest):
     context = {}
     auth_data = request.session.get('auth_data', {'is_auth': False})
     context.update(auth_data)
@@ -125,18 +119,17 @@ def create_post(request: HttpRequest):
                 Post.objects.get(title=form.cleaned_data['title'])
                 context['form_data'] = form.cleaned_data
                 context['errors'] = {'title': [{'message': 'Указанное название поста уже присутствует в базе'}]}
-                return render(request, 'create_post.html', context)
+                return render(request, 'add_post.html', context)
             except Post.DoesNotExist:
                 post = Post.objects.create(title=form.cleaned_data['title'],
                                            body=form.cleaned_data['body'],
                                            author=request.user)
-                post.tags.add(form.cleaned_data['tags'])
                 post.save()
-                return render(request, 'create_post.html', context)
+                return render(request, 'add_post.html', context)
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
 
-    return render(request, 'create_post.html', context)
+    return render(request, 'add_post.html', context)
 
 
 def edit_post(request: HttpRequest, pk: int):
@@ -150,14 +143,15 @@ def edit_post(request: HttpRequest, pk: int):
 
     if request.method != 'POST':
         form = PostForm(instance=post)
+        return render(request, 'edit_post.html', context)
     else:
         form = PostForm(instance=post, data=request.POST)
         if form.is_valid():
-            form.save(commit=False)
-            form.save_m2m()
+            form.save()
             return render(request, 'edit_post.html', context)
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
+
     return render(request, 'edit_post.html', context)
 
 
