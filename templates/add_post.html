@@ -1,25 +1,24 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="posts-block">
-    <h3>{% if post.id is not None %} Редактировать статью {% else %} Добавить статью {% endif %}</h3>
-    <form method="post">
+
+    <form action="{% url 'add-post' %}" method='post'>
         {% csrf_token %}
         <div>
-            <input type="text" name="post_title" placeholder="Заголовок" value="">
-            {% for err in errors.user_login %}
-            <span class="err-msg">{{ err.message }}</span>
+            <input type="text" name="title" placeholder="Название" value="{{ form_data.title }}">
+            {% for err in errors.title %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
+        </div>
+
+        <div>
+            <textarea type="text" rows="10" name="body" placeholder="Текст">{{ form_data.body }}</textarea>
+            {% for err in errors.body %}
+                <span class="err-msg">{{ err.message }}</span>
             {% endfor %}
         </div>
         <div>
-            <textarea type="text" rows="10" name="post_text" placeholder="Текст статьи" value=""></textarea>
-            {% for err in errors.post_text %}
-            <span class="err-msg">{{ err.message }}</span>
-            {% endfor %}
-        </div>
-        <div>
-            <input type="submit" class="form-btn" style="width:200px" value="Сохранить">
+            <input type="submit" class="form-btn" value="Добавить статью">
         </div>
     </form>
-</div>
+
 {% endblock content %}

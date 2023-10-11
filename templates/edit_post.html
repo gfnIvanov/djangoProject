@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h3>{% if post.id is not None %} Редактировать статью {% else %} Добавить статью {% endif %}</h3>
-<form method="post">
-    {% csrf_token %}
-    <div>
-        <input type="text" name="user_login" placeholder="Логин" value="{{ form_data.user_login }}">
-        {% for err in errors.user_login %}
-        <span class="err-msg">{{ err.message }}</span>
-        {% endfor %}
-    </div>
-    <div>
-        <input type="password" name="user_password" placeholder="Пароль" value="{{ form_data.user_password }}">
-        {% for err in errors.user_password %}
-        <span class="err-msg">{{ err.message }}</span>
-        {% endfor %}
-        {% for err in errors.auth_failed %}
-        <span class="err-msg ta-c">{{ err.message }}</span>
-        {% endfor %}
-    </div>
-    <div>
-        <input type="submit" class="form-btn" value="Вход">
-    </div>
-</form>
+
+
+    <h3>Редактировать статью:</h3>
+
+    <form action="{% url 'edit-post' post.pk %}" method='post'>
+        {% csrf_token %}
+        <div>
+            {{ post.title }}
+            <input type="text" name="title" placeholder="Название" value={{ post.title }}>
+            {% for err in errors.title %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
+        </div>
+
+        <div>
+            <textarea rows="10" name="body" placeholder="Текст"> {{ post.body }} </textarea>
+            {% for err in errors.body %}
+                <span class="err-msg">{{ err.message }}</span>
+            {% endfor %}
+        </div>
+
+        <div>
+            <input type="submit" class="form-btn" value="Сохранить изменения">
+        </div>
+    </form>
+
 {% endblock content %}
