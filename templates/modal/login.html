@@ -7,7 +7,7 @@
                 <img src="{% static 'images/close.svg' %}" style="cursor: pointer" />
             </a>
         </div>
-        <form method="post">
+        <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div>
                 <input type="text" name="user_login" placeholder="Логин" value="{{ form_data.user_login }}">

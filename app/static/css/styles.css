@@ -34,6 +34,12 @@ a {
     color: black;
 }
 
+.index-page {
+    margin: auto;
+    width: 80%;
+    padding: 20px;
+}
+
 .btn-block {
     display: flex;
 }
@@ -118,11 +124,6 @@ textarea {
     border: 1px solid gray;
     border-radius: 2px;
     cursor: pointer;
-}
-
-
-.Line {
-    margin: 25px;
 }
 
 .err-msg {
