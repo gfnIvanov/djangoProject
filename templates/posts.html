@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-<div style="margin: 25px"><h2>Тут какие-то статьи</h2></div>
-
-<div style="margin: 25px; text-align: justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure! Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti minima ipsa nemo qui dignissimos beatae. Sequi nam cumque esse recusandae cum, sed qui odit nihil aspernatur consequatur error at iure!</div>
-<div style="margin: 25px; text-align: right"><a href=""><u>Редактировать</u></a></div>
+{% for post in posts %}
+<div class="posts-block">
+    <div class="post-title"><h3><a class="link-btn" href="{% url 'watch-post' post.id %}">{{ post.title }}</a></h3></div>
+    <div class="pre-view">{{ post.body }}</div>
+    <div class="post-info">
+        <div>{{ post.date_create }}</div>
+        <div>автор: {{ post.author }}</div>
+    </div>
+</div>
+{% endfor %}
+<div class="add-post-btn-block">
+    <a class="add-post-btn" href="{% url 'add-post' %}" style="width: 200px">Добавить статью</a>
+</div>
 {% endblock %}

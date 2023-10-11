@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="posts-block">
+    <div class="post-title"><h3>{{ post.title }}</h3></div>
+    <div class="post-body">{{ post.body }}</div>
+    <div class="post-info">
+        <div>{{ post.date_create }}</div>
+        <div>автор: {{ post.author }}</div>
+    </div>
+</div>
+<div class="add-post-btn-block">
+    <div class="add-post-btn" style="width: 200px">Редактировать статью</div>
+</div>
+{% endblock %}

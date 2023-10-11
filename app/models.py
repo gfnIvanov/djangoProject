@@ -10,6 +10,9 @@ class Post(models.Model):
     tags = TaggableManager()
     date_create = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['date_create']
+
     def __str__(self):
         return self.title
 
