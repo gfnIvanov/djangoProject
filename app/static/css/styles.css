@@ -9,18 +9,23 @@ body {
 }
 
 .main {
+    position: relative;
+    top: 70px;
+    bottom: 50px;
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
 .header {
-    position: relative;
+    position: fixed;
     display: flex;
     width: 100%;
     top: 0;
     height: 70px;
     border-bottom: 1px solid gray;
+    background: #fff;
+    z-index: 1000;
 }
 
 a {
@@ -52,13 +57,19 @@ a {
 
 .content {
     flex: 1 0 auto;
+    position: relative;
+    padding-bottom: 80px;
+    top: 10px;
 }
 
 .footer {
-    flex: 0 0 auto;
+    position: fixed;
+    bottom: 0;
     width: 100%;
     height: 50px;
     border-top: 1px solid gray;
+    background: #fff;
+    z-index: 1000;
 }
 
 .modal-mask {
@@ -73,14 +84,23 @@ a {
     transition: opacity 0.3s ease;
 }
 
-input {
+input, textarea {
     width: 96%;
     padding: 0px 5px 0px;
     outline: none;
     background: transparent;
-    height: 42px;
     border: 1px solid gainsboro;
     margin-top: 10px;
+}
+
+input {
+    height: 42px;
+}
+
+textarea {
+    padding: 5px;
+    resize: none;
+    overflow: auto;
 }
 
 .modal-container {
@@ -104,6 +124,7 @@ input {
 .Line {
     margin: 25px;
 }
+
 .err-msg {
     width: 100%;
     display: inline-block;
@@ -113,4 +134,51 @@ input {
 
 .ta-c {
     text-align: center;
+}
+
+.posts-block {
+    margin: auto;
+    width: 70%;
+    padding: 20px;
+}
+
+.link-btn {
+    cursor: pointer;
+    border-bottom: 1px solid black;
+}
+
+.post-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-post-btn-block {
+    position: fixed;
+    width: 100%;
+    bottom: 60px;
+    text-align: center;
+}
+
+.add-post-btn {
+    margin: auto;
+    bottom: 40px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 2px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.pre-view {
+    text-overflow: unset;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 15px;
+    white-space: nowrap;
+}
+
+.post-body {
+    margin-bottom: 15px;
+    text-align: justify;
 }

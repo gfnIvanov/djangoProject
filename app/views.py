@@ -16,10 +16,36 @@ def index(request: HttpRequest):
 
 
 def posts(request: HttpRequest):
-    context = {'active_page': 'posts'}
+    posts_data = []
+    posts = Post.objects.all()
+    for post in posts:
+        user = User.objects.get(username=post.author)
+        author = user.last_name + ' ' + user.first_name[0] + '.'
+        print(post.tags)
+        posts_data.append({
+            'id': post.id,
+            'title': post.title,
+            'body': post.body,
+            'date_create': post.date_create,
+            'author': author
+        })
+    context = {'active_page': 'posts', 'posts': posts_data}
     auth_data = request.session.get('auth_data', {'is_auth': False})
     context.update(auth_data)
     return render(request, 'posts.html', context)
+
+
+def add_post(request: HttpRequest):
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    return render(request, 'add_post.html', auth_data)
+
+
+def watch_post(request: HttpRequest, pk: int):
+    post = Post.objects.get(pk=pk)
+    context = {'post': post}
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
+    return render(request, 'watch_post.html', context)
 
 
 def admin(request: HttpRequest):
@@ -33,7 +59,7 @@ def register(request: HttpRequest):
     """
     Регистрация нового пользователя
     При успешной регистрации сразу выполняем авторизацию пользователя
-    """  
+    """
     context = {'show_register': True}
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -87,39 +113,51 @@ def logout(request):
     _set_auth_data(request)
     return HttpResponseRedirect(reverse('index'))
 
-    
+
 def create_post(request: HttpRequest):
+    context = {}
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
     if request.method == "POST":
-        context = {}
         form = PostForm(request.POST)
         if form.is_valid():
             try:
                 Post.objects.get(title=form.cleaned_data['title'])
                 context['form_data'] = form.cleaned_data
                 context['errors'] = {'title': [{'message': 'Указанное название поста уже присутствует в базе'}]}
+                return render(request, 'create_post.html', context)
             except Post.DoesNotExist:
                 post = Post.objects.create(title=form.cleaned_data['title'],
                                            body=form.cleaned_data['body'],
-                                           tags=form.cleaned_data['tags'],
                                            author=request.user)
+                post.tags.add(form.cleaned_data['tags'])
                 post.save()
-                return HttpResponseRedirect(reverse('index'))
+                return render(request, 'create_post.html', context)
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
-    return render(request, 'index.html', context)
-        
+
+    return render(request, 'create_post.html', context)
+
 
 def edit_post(request: HttpRequest, pk: int):
+    context = {}
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
+
     post = Post.objects.get(pk=pk)
+    context['post'] = post
+    context['index'] = index
 
     if request.method != 'POST':
         form = PostForm(instance=post)
     else:
         form = PostForm(instance=post, data=request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('index.html', post_id=post.id)
-    context = {'post': post, 'index': index, 'form': form}
+            form.save(commit=False)
+            form.save_m2m()
+            return render(request, 'edit_post.html', context)
+        context['form_data'] = form.cleaned_data
+        context['errors'] = form.errors.get_json_data()
     return render(request, 'edit_post.html', context)
 
 
