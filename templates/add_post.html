@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
-{% block content %}
 
-    <form action="{% url 'add-post' %}" method='post'>
+{% block content %}
+<div class="posts-block">
+    <h3>Добавить статью:</h3>
+    <form method="post" action="{% url 'add-post' %}">
         {% csrf_token %}
         <div>
             <input type="text" name="title" placeholder="Название" value="{{ form_data.title }}">
             {% for err in errors.title %}
-                <span class="err-msg">{{ err.message }}</span>
+            <span class="err-msg">{{ err.message }}</span>
             {% endfor %}
         </div>
-
         <div>
             <textarea type="text" rows="10" name="body" placeholder="Текст">{{ form_data.body }}</textarea>
             {% for err in errors.body %}
-                <span class="err-msg">{{ err.message }}</span>
+            <span class="err-msg">{{ err.message }}</span>
             {% endfor %}
         </div>
         <div>
-            <input type="submit" class="form-btn" value="Добавить статью">
+            <input class="form-btn" type="submit" value="Добавить статью" style="width:200px">
         </div>
     </form>
-
+</div>
 {% endblock content %}

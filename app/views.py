@@ -1,6 +1,6 @@
 from typing import Optional
 from django.contrib.auth import authenticate
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -121,11 +121,12 @@ def add_post(request: HttpRequest):
                 context['errors'] = {'title': [{'message': 'Указанное название поста уже присутствует в базе'}]}
                 return render(request, 'add_post.html', context)
             except Post.DoesNotExist:
+                user = User.objects.get(username=request.session.get('auth_data')['login'])
                 post = Post.objects.create(title=form.cleaned_data['title'],
                                            body=form.cleaned_data['body'],
-                                           author=request.user)
+                                           author=user)
                 post.save()
-                return render(request, 'add_post.html', context)
+                return HttpResponseRedirect(reverse('posts'))
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
 
@@ -139,19 +140,15 @@ def edit_post(request: HttpRequest, pk: int):
 
     post = Post.objects.get(pk=pk)
     context['post'] = post
-    context['index'] = index
 
-    if request.method != 'POST':
-        form = PostForm(instance=post)
-        return render(request, 'edit_post.html', context)
-    else:
+    if request.method == 'POST':
         form = PostForm(instance=post, data=request.POST)
         if form.is_valid():
             form.save()
             return render(request, 'edit_post.html', context)
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
-
+    print(context)
     return render(request, 'edit_post.html', context)
 
 
@@ -172,9 +169,10 @@ def create_comment(request: HttpRequest):
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
+            print(request.session.get('auth_data'))
             comment = Comment.objects.create(body=form.cleaned_data['body'],
                                              author=request.user,
-                                             post="")  # TODO взять Post на который пишется коммент
+                                             post=request.session.get('auth_data').user_login)  # TODO взять Post на который пишется коммент
             comment.save()
             return render(request, 'index.html')
         context['form_data'] = form.cleaned_data
@@ -188,5 +186,6 @@ def _set_auth_data(request: HttpRequest, user: Optional[User] = None) -> None:
         return
     request.session['auth_data'] = dict.fromkeys(['is_auth', 'firstname', 'surname'])
     request.session['auth_data']['is_auth'] = True
+    request.session['auth_data']['login'] = user.username
     request.session['auth_data']['firstname'] = user.first_name
     request.session['auth_data']['surname'] = user.last_name[0] + '.'

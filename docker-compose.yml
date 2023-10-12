@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  web:
+    container_name: django
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    container_name: mysql
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: django_project
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./dbdata:/var/lib/mysql/
