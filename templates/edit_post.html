@@ -1,29 +1,25 @@
 {% extends 'base.html' %}
+
 {% block content %}
-
-
+<div class="posts-block">
     <h3>Редактировать статью:</h3>
-
-    <form action="{% url 'edit-post' post.pk %}" method='post'>
+    <form action="{% url 'edit-post' post.id %}" method='post'>
         {% csrf_token %}
         <div>
-            {{ post.title }}
-            <input type="text" name="title" placeholder="Название" value={{ post.title }}>
+            <input type="text" name="title" placeholder="Название" value="{{ post.title }}">
             {% for err in errors.title %}
-                <span class="err-msg">{{ err.message }}</span>
+            <span class="err-msg">{{ err.message }}</span>
             {% endfor %}
         </div>
-
         <div>
-            <textarea rows="10" name="body" placeholder="Текст"> {{ post.body }} </textarea>
+            <textarea rows="10" name="body" placeholder="Текст">{{ post.body }}</textarea>
             {% for err in errors.body %}
-                <span class="err-msg">{{ err.message }}</span>
+            <span class="err-msg">{{ err.message }}</span>
             {% endfor %}
         </div>
-
         <div>
-            <input type="submit" class="form-btn" value="Сохранить изменения">
+            <input type="submit" class="form-btn" value="Сохранить изменения" style="width:200px">
         </div>
     </form>
-
+</div>
 {% endblock content %}

@@ -87,7 +87,7 @@ DATABASES = {
         "NAME": "django_project",
         "USER": env('DB_USER'),
         "PASSWORD": env('DB_PASSWORD'),
-        "HOST": "localhost",
+        "HOST": env('DB_HOST', default="127.0.0.1"),
         "PORT": "3306",
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
