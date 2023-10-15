@@ -17,7 +17,7 @@ class Post(models.Model):
 
 class About(models.Model):
     title = models.CharField(max_length=450)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, )
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     body = models.TextField()
 
     def __str__(self):
@@ -28,7 +28,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
                              related_name='comments')
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, )
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     body = models.TextField()
     date_create = models.DateTimeField(auto_now_add=True)
 
