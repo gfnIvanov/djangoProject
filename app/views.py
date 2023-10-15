@@ -172,7 +172,7 @@ def create_comment(request: HttpRequest):
             print(request.session.get('auth_data'))
             comment = Comment.objects.create(body=form.cleaned_data['body'],
                                              author=request.user,
-                                             post=request.session.get('auth_data').user_login)  # TODO взять Post на который пишется коммент
+                                             post=request.session.get('auth_data').user_login)
             comment.save()
             return render(request, 'index.html')
         context['form_data'] = form.cleaned_data

@@ -1,4 +1,4 @@
-.PHONY: dev install list
+.PHONY: dev install
 
 ENGINE = venv/bin/python
 ENGINE_SETUP = venv/bin/pip
@@ -22,4 +22,3 @@ install:
 
 req_in_file:
 	$(ENGINE_SETUP) freeze > requirements.txt
-	
