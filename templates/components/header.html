@@ -7,8 +7,8 @@
         <a class="menu-btn" href="{% url 'posts' %}">
             <div id="articles-page-btn" class="{% if active_page == 'posts' %} active-page {% endif %}">Статьи</div>
         </a>
-        <a class="menu-btn" href="{% url 'admin' %}">
-            <div id="practice-page-btn" class="{% if active_page == 'admin' %} active-page {% endif %}">Практика</div>
+        <a class="menu-btn" href="{% url 'practice' %}">
+            <div id="practice-page-btn" class="{% if active_page in 'practice,upload_file,train_model,use_model' %} active-page {% endif %}">Практика</div>
         </a>
         {% endif %}
     </div>

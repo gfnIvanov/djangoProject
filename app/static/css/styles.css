@@ -34,7 +34,7 @@ a {
     color: black;
 }
 
-.index-page {
+.index-page, .practice-page {
     margin: auto;
     width: 80%;
     padding: 20px;
@@ -167,7 +167,7 @@ select {
     text-align: center;
 }
 
-.add-post-btn {
+.add-post-btn, .use-button {
     margin: auto;
     bottom: 40px;
     padding: 5px;
@@ -189,4 +189,28 @@ select {
 .post-body {
     margin-bottom: 15px;
     text-align: justify;
+}
+
+.input-file {
+    display: flex;
+}
+
+.input-file div:first-child > input {
+    border: 0px;
+    border-bottom: 1px solid gainsboro;
+    padding: 0px;
+}
+
+.input-file div:first-child {
+    width: 50%;
+}
+
+.input-file div:nth-child(2) {
+    width: 20%;
+}
+
+.use-button-block {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
 }

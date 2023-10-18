@@ -1,11 +1,15 @@
+import os
 from typing import Optional
 from django.contrib.auth import authenticate
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.contrib.auth.models import User
-from .forms import RegisterForm, LoginForm, PostForm, CommentForm
-from .models import Post, Comment
+from django.core.files.uploadedfile import UploadedFile
+from config.settings import BASE_DIR
+from .forms import RegisterForm, LoginForm, PostForm, UploadFileForm
+from .models import Post
+from .ML import model
 
 
 def index(request: HttpRequest):
@@ -42,11 +46,11 @@ def watch_post(request: HttpRequest, pk: int):
     return render(request, 'watch_post.html', context)
 
 
-def admin(request: HttpRequest):
-    context = {'active_page': 'admin'}
+def practice(request: HttpRequest):
+    context = {'active_page': 'practice'}
     auth_data = request.session.get('auth_data', {'is_auth': False})
     context.update(auth_data)
-    return render(request, 'admin.html', context)
+    return render(request, 'practice.html', context)
 
 
 def register(request: HttpRequest):
@@ -129,7 +133,6 @@ def add_post(request: HttpRequest):
                 return HttpResponseRedirect(reverse('posts'))
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
-
     return render(request, 'add_post.html', context)
 
 
@@ -145,10 +148,9 @@ def edit_post(request: HttpRequest, pk: int):
         form = PostForm(instance=post, data=request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'edit_post.html', context)
+            return HttpResponseRedirect(reverse('posts'))
         context['form_data'] = form.cleaned_data
         context['errors'] = form.errors.get_json_data()
-    print(context)
     return render(request, 'edit_post.html', context)
 
 
@@ -164,20 +166,39 @@ def get_post(request: HttpRequest, pk: int):
     return render(request, 'index.html', {'post': post})
 
 
-def create_comment(request: HttpRequest):
-    context = {}
-    if request.method == "POST":
-        form = CommentForm(request.POST)
+def upload_file(request: HttpRequest):
+    context = {'active_page': 'upload_file'}
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            print(request.session.get('auth_data'))
-            comment = Comment.objects.create(body=form.cleaned_data['body'],
-                                             author=request.user,
-                                             post=request.session.get('auth_data').user_login)
-            comment.save()
-            return render(request, 'index.html')
-        context['form_data'] = form.cleaned_data
+            _upload_file(request.FILES['file'])
+            return HttpResponseRedirect(reverse('train_model'))
         context['errors'] = form.errors.get_json_data()
-    return render(request, 'index.html', context)
+    return render(request, 'practice.html', context)
+
+
+def train_model(request: HttpRequest):
+    context = {'active_page': 'train_model'}
+    messages = []
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
+    model.train()
+    with open(os.path.join(BASE_DIR, 'app/ML/log.txt'), 'r') as log_file:
+        for str in log_file.readlines():
+            messages.append(str)
+    context.update({'messages': ','.join(messages)})
+    return render(request, 'train_model.html', context)
+
+
+def use_model(request: HttpRequest):
+    context = {'active_page': 'use_model'}
+    auth_data = request.session.get('auth_data', {'is_auth': False})
+    context.update(auth_data)
+    target, test_data, prediction = model.use()
+    context.update({'target': target, 'test_data': test_data, 'prediction': prediction})
+    return render(request, 'use_model.html', context)
 
 
 def _set_auth_data(request: HttpRequest, user: Optional[User] = None) -> None:
@@ -189,3 +210,9 @@ def _set_auth_data(request: HttpRequest, user: Optional[User] = None) -> None:
     request.session['auth_data']['login'] = user.username
     request.session['auth_data']['firstname'] = user.first_name
     request.session['auth_data']['surname'] = user.last_name[0] + '.'
+
+
+def _upload_file(file: UploadedFile):
+    with open(os.path.join(BASE_DIR, 'temp/data.csv'), 'wb+') as dest:
+        for chunk in file.chunks():
+            dest.write(chunk)

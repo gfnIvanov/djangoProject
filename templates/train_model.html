@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="practice-page">
+    <div><h2 id="main-page-title">Процесс обучения...</h2></div>
+    <div>
+        <div id="messages" style="display:none">{{ messages }}</div>
+        <textarea id="train-process" type="text" rows="7"></textarea>
+    </div>
+    <div class="use-button-block" style="display:none">
+        <a class="use-button" href="{% url 'register' %}">Использовать модель</a>
+    </div>
+</div>
+{% endblock %}
