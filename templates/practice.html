@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="practice-page">
+    <div><h2>Использование модели регрессии</h2></div>
+    {% if upload_success %}
+    {% else %}
+    <div>
+        <form enctype="multipart/form-data" method="post" action="upload_file">
+            {% csrf_token %}
+            <div class="input-file">
+                <div><input type="file" name="file"></div>
+                <div><input type="submit" value="Отправить"></div>
+            </div>
+            {% for err in errors.file %}
+            <span class="err-msg ta-c" style="width:50%">{{ err.message }}</span>
+            {% endfor %}
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
