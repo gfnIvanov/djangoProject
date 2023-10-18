@@ -27,3 +27,5 @@ dbdata
 temp/*
 app/ML/log.txt
 app/ML/XGBModel.dat
+
+!.gitkeep
